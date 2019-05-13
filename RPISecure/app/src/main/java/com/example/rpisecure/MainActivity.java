@@ -16,7 +16,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     WebView videoView;
     ImageButton btnPlay;
 
-    String videoURL = "https://192.168.137.216:8081/";
+    String videoURL = "http://192.168.137.216:8081/";
     @SuppressLint("WrongViewCast")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setMessage("Please wait....");
-        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCanceledOnTouchOutside(true);
         dialog.show();
         WebView videoView = (WebView) findViewById(R.id.videoView);
         videoView.loadUrl(videoURL);
