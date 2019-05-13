@@ -25,17 +25,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         videoView = (WebView) findViewById(R.id.videoView);
         btnPlay = (ImageButton) findViewById(R.id.btn_play);
         btnPlay.setOnClickListener(this);
-
-    }
-
-    @Override
-    public void onClick(View v) {
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setMessage("Please wait....");
         dialog.setCanceledOnTouchOutside(true);
         dialog.show();
         WebView videoView = (WebView) findViewById(R.id.videoView);
         videoView.loadUrl(videoURL);
+        dialog.dismiss();
+
+    }
+
+    @Override
+    public void onClick(View v) {
 
     }
 }
