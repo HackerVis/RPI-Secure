@@ -4,17 +4,22 @@ package com.example.rpisecure;
         import android.app.ProgressDialog;
         import android.graphics.Bitmap;
         import android.graphics.Canvas;
+        import android.graphics.Paint;
         import android.graphics.Picture;
         import android.media.MediaPlayer;
         import android.net.Uri;
+        import android.os.Environment;
         import android.support.v7.app.AppCompatActivity;
         import android.os.Bundle;
         import android.view.View;
         import android.webkit.WebView;
+        import android.webkit.WebViewClient;
         import android.widget.ImageButton;
         import android.widget.VideoView;
 
+        import java.io.File;
         import java.io.FileOutputStream;
+        import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ProgressDialog dialog;
@@ -42,23 +47,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        Picture picture = videoView.capturePicture();
-        Bitmap b = Bitmap.createBitmap( picture.getWidth(),
-                picture.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas c = new Canvas( b );
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.webview);
 
-        picture.draw( c );
-        FileOutputStream fos = null;
-        try {
+        webView = (WebView) findViewById(R.id.webView1);
+        webView.loadUrl("http://developer.android.com/reference/packages.html");
+//      webView.loadUrl("http://developer.android.com/training/basics/firstapp/creating-project.html");
 
-            fos = new FileOutputStream( "mnt/sdcard/screenshot.jpg" );
-            if ( fos != null )
-            {
-                b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                fos.close();
+        webView.setWebViewClient(new WebViewClient() {
+
+            public void onPageFinished(WebView view, String url) {
+                // do your stuff here
+                webView.measure(MeasureSpec.makeMeasureSpec(
+                        MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED),
+                        MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+                webView.layout(0, 0, webView.getMeasuredWidth(),
+                        webView.getMeasuredHeight());
+                webView.setDrawingCacheEnabled(true);
+                webView.buildDrawingCache();
+                Bitmap bm = Bitmap.createBitmap(webView.getMeasuredWidth(),
+                        webView.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+
+                Canvas bigcanvas = new Canvas(bm);
+                Paint paint = new Paint();
+                int iHeight = bm.getHeight();
+                bigcanvas.drawBitmap(bm, 0, iHeight, paint);
+                webView.draw(bigcanvas);
+                System.out.println("1111111111111111111111="
+                        + bigcanvas.getWidth());
+                System.out.println("22222222222222222222222="
+                        + bigcanvas.getHeight());
+
+                if (bm != null) {
+                    try {
+                        String path = Environment.getExternalStorageDirectory()
+                                .toString();
+                        OutputStream fOut = null;
+                        File file = new File(path, "/aaaa.png");
+                        fOut = new FileOutputStream(file);
+
+                        bm.compress(Bitmap.CompressFormat.PNG, 50, fOut);
+                        fOut.flush();
+                        fOut.close();
+                        bm.recycle();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
             }
-        }
-        catch(Exception e) {}
+        });
+    }
+}
 
     }
 }
