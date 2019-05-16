@@ -27,6 +27,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmailAddress;
     private EditText etPassword;
     private TextView tvSignup;
+    private EditText etIp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,9 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         tvSignup = findViewById(R.id.tv_signup);
         btSignup = findViewById(R.id.bt_signup);
+        btSignup = findViewById(R.id.bt_signup);
+        etIp = findViewById(R.id.et_ip);
+
 
         Backendless.initApp(this,
                 getString(R.string.be_app_id),
@@ -50,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 if(btLogin.getVisibility() == View.VISIBLE) {
                     btLogin.setVisibility(View.GONE);
                     etName.setVisibility(View.VISIBLE);
+                    etIp.setVisibility(View.VISIBLE);
                     btSignup.setVisibility(View.VISIBLE);
                     tvSignup.setText(R.string.cancel_sign_up);
                 } else {
@@ -57,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                     etName.setVisibility(View.GONE);
                     btSignup.setVisibility(View.GONE);
                     tvSignup.setText(R.string.sign_me_up);
+                    etIp.setVisibility(View.GONE);
                 }
             }
         });
@@ -105,6 +111,7 @@ public class LoginActivity extends AppCompatActivity {
             String userEmail = etEmailAddress.getText().toString();
             String password = etPassword.getText().toString();
 
+
             userEmail = userEmail.trim();
             password = password.trim();
 
@@ -118,8 +125,10 @@ public class LoginActivity extends AppCompatActivity {
 
                 Backendless.UserService.login(userEmail, password, new AsyncCallback<BackendlessUser>() {
                     public void handleResponse(BackendlessUser user) {
+                        String ip = etIp.getText().toString();
                         // user has been logged in
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        intent.putExtra("ip", ip);
                         startActivity(intent);
                     }
 
@@ -141,10 +150,13 @@ public class LoginActivity extends AppCompatActivity {
             String userEmail = etEmailAddress.getText().toString();
             String password = etPassword.getText().toString();
             String name = etName.getText().toString();
+            String ip = etIp.getText().toString();
 
             userEmail = userEmail.trim();
             password = password.trim();
             name = name.trim();
+            ip = ip.trim();
+
 
             if (!userEmail.isEmpty() &&!password.isEmpty() && !name.isEmpty()) {
                 String validated = validateEmailPassword(userEmail, password);
@@ -154,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                     BackendlessUser user = new BackendlessUser();
                     user.setEmail(userEmail);
                     user.setProperty("name", name);
+                    user.setProperty("ip", ip);
                     user.setPassword(password);
 
                     final ProgressDialog pDialog = ProgressDialog.show(LoginActivity.this,

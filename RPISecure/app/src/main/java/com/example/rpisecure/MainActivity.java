@@ -1,21 +1,30 @@
 package com.example.rpisecure;
 
-        import android.app.ProgressDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 
+import com.backendless.Backendless;
+import com.backendless.BackendlessUser;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ProgressDialog dialog;
     WebView videoView;
     ImageButton btnPlay;
+    BackendlessUser currentUser = Backendless.UserService.CurrentUser();
+    String ip = currentUser.getProperty("ip").toString();
 
-    String videoURL = "http://10.23.25.246:8081/";
+
+    String videoURL = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = getIntent();
+        videoURL = "http://" + ip + "/";
         setContentView(R.layout.activity_main);
         videoView = (WebView) findViewById(R.id.videoView);
         btnPlay = (ImageButton) findViewById(R.id.btn_play);
@@ -32,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+
     }
 }
 

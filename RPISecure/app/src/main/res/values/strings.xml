@@ -19,4 +19,5 @@
     <string name="creating_new_account_message">New Account Creating</string>
     <string name="empty_field_signup_error">Empty Field</string>
     <string name="title_activity_login">Login</string>
+    <string name="ip">1.1.1.1:1111</string>
 </resources>
