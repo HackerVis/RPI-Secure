@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">RPI Secure</string>
+    <string name="email_address">Email Address</string>
+    <string name="password">Password</string>
+    <string name="name">User Name</string>
+    <string name="log_in">Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="be_app_id">DDA13E92-D154-7DB4-FF63-50F0BDDD4700</string>
+    <string name="be_android_api_key">9F36E8F7-2792-833F-FFC5-4BE41F246400</string>
+    <string name="cancel_sign_up">Cancel</string>
+    <string name="sign_me_up">Sign Me Up!</string>
+    <string name="authentication_error_title">Authentication Error</string>
+    <string name="invalid_email_format_error">Invalid Email</string>
+    <string name="password_length_error">Password need more characters</string>
+    <string name="password_email_same_error">Password or Email is incorrect</string>
+    <string name="progress_title">Communicating</string>
+    <string name="logging_in_message">Please wait...</string>
+    <string name="empty_field_login_error">Empty Feild</string>
+    <string name="creating_new_account_message">New Account Creating</string>
+    <string name="empty_field_signup_error">Empty Field</string>
+    <string name="title_activity_login">Login</string>
 </resources>
