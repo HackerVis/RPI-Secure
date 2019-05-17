@@ -55,7 +55,6 @@ public class LoginActivity extends AppCompatActivity {
                     btLogin.setVisibility(View.GONE);
                     etName.setVisibility(View.VISIBLE);
                     etIp.setVisibility(View.VISIBLE);
-                    btSignup.setVisibility(View.VISIBLE);
                     tvSignup.setText(R.string.cancel_sign_up);
                 } else {
                     btLogin.setVisibility(View.VISIBLE);
