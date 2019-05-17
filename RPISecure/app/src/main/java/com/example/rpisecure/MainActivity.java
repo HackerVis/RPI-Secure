@@ -1,8 +1,8 @@
 package com.example.rpisecure;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Movie;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -12,8 +12,6 @@ import android.widget.ImageButton;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
-import com.backendless.async.callback.AsyncCallback;
-import com.backendless.exceptions.BackendlessFault;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ProgressDialog dialog;
@@ -24,12 +22,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton fab;
     EditText etIp;
     int monitor = 0;
+    Context context;
 
 
     String videoURL = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = getApplicationContext();
         Intent intent = getIntent();
         videoURL = "http://" + ip + "/";
         setContentView(R.layout.activity_main);
@@ -55,26 +55,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (monitor == 0) {
             etIp = findViewById(R.id.et_ip);
             etIp.setVisibility(View.VISIBLE);
+            monitor = 1;
         }
-        monitor = 1;
         if (monitor == 1) {
             BackendlessUser user = new BackendlessUser();
             etIp.setVisibility(View.GONE);
             user.setProperty("ip", ip);
-
-            // save object asynchronously
-            Backendless.Persistence.save(ip, new AsyncCallback<Ip>() {
-                @Override
-                public void handleResponse(Ip response) {
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-                }
-                @Override
-                public void handleFault(BackendlessFault fault) {
-
-                }
-            });
+            monitor = 2;
         }
+        if (monitor == 2){
+            etIp = findViewById(R.id.et_ip);
+            etIp.setVisibility(View.GONE);
+        }
+
     }
 
     @Override
