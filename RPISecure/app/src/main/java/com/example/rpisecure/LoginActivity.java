@@ -40,7 +40,6 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.et_password);
         tvSignup = findViewById(R.id.tv_signup);
         btSignup = findViewById(R.id.bt_signup);
-        btSignup = findViewById(R.id.bt_signup);
         etIp = findViewById(R.id.et_ip);
 
 
@@ -55,13 +54,15 @@ public class LoginActivity extends AppCompatActivity {
                     btLogin.setVisibility(View.GONE);
                     etName.setVisibility(View.VISIBLE);
                     etIp.setVisibility(View.VISIBLE);
+                    btSignup.setVisibility(View.VISIBLE);
                     tvSignup.setText(R.string.cancel_sign_up);
                 } else {
                     btLogin.setVisibility(View.VISIBLE);
                     etName.setVisibility(View.GONE);
-                    btSignup.setVisibility(View.GONE);
+                    tvSignup.setVisibility(View.GONE);
                     tvSignup.setText(R.string.sign_me_up);
                     etIp.setVisibility(View.GONE);
+                    btSignup.setVisibility(View.GONE);
                 }
             }
         });
