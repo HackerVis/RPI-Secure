@@ -28,6 +28,8 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etPassword;
     private TextView tvSignup;
     private EditText etIp;
+    private String noted;
+    private EditText note;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
         tvSignup = findViewById(R.id.tv_signup);
         btSignup = findViewById(R.id.bt_signup);
         etIp = findViewById(R.id.et_ip);
+        note = findViewById(R.id.note);
+
 
 
         Backendless.initApp(this,
@@ -126,9 +130,11 @@ public class LoginActivity extends AppCompatActivity {
                 Backendless.UserService.login(userEmail, password, new AsyncCallback<BackendlessUser>() {
                     public void handleResponse(BackendlessUser user) {
                         String ip = etIp.getText().toString();
+                        String noted = "";
                         // user has been logged in
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("ip", ip);
+                        intent.putExtra("note", noted);
                         startActivity(intent);
                     }
 
@@ -151,6 +157,7 @@ public class LoginActivity extends AppCompatActivity {
             String password = etPassword.getText().toString();
             String name = etName.getText().toString();
             String ip = etIp.getText().toString();
+            String note = "";
 
             userEmail = userEmail.trim();
             password = password.trim();
@@ -168,6 +175,7 @@ public class LoginActivity extends AppCompatActivity {
                     user.setProperty("name", name);
                     user.setProperty("ip", ip);
                     user.setPassword(password);
+                    user.setProperty("note", "");
 
                     final ProgressDialog pDialog = ProgressDialog.show(LoginActivity.this,
                             getString(R.string.progress_title),

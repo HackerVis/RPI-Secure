@@ -22,11 +22,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ImageButton btnPlay;
     ImageButton ipchange;
     EditText etIp;
+    EditText note;
     int monitor = 0;
+    int monitor2 = 0;
     Context context;
     String ipanew;
     String oldIp;
+    ImageButton btnNotes;
+    String notes = "";
     BackendlessUser currentUser;
+    String noteOld;
     private final String TAG = this.getClass().getSimpleName();
 
     String videoURL = "";
@@ -38,7 +43,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         currentUser = Backendless.UserService.CurrentUser();
         String ip = currentUser.getProperty("ip").toString();
         Intent intent = getIntent();
-        ImageButton btnPlay = findViewById(R.id.btn_play);
+        ImageButton note = findViewById(R.id.btn_notes);
+
+
+
         videoURL = "http://" + ip + "/";
         etIp = findViewById(R.id.newip);
         Log.i(TAG, ip);
@@ -63,6 +71,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 IpButtonClicked();
+            }
+        });
+        btnNotes = findViewById(R.id.btn_notes);
+        btnNotes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NotesButtonClicked();
             }
         });
     }
@@ -115,6 +130,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 etIp.setText("");
             }
             monitor = 0;
+        }
+
+
+
+    }
+    private void NotesButtonClicked() {
+        note = findViewById(R.id.note);
+        notes = currentUser.getProperty("note").toString();
+        noteOld = currentUser.getProperty("note").toString();
+        if (monitor2 == 0) {
+            note.setVisibility(View.VISIBLE);
+            monitor2 = 1;
+        }
+        else if (monitor2 == 1){
+            BackendlessUser user = currentUser;
+            note.setVisibility(View.GONE);
+            notes = note.getText().toString();
+            user.setProperty("note", notes);
+            if(notes.equals(noteOld)){
+                dialog.setMessage("Stopping...");
+                dialog.dismiss();
+            }
+            else{
+                Backendless.UserService.update( user, new AsyncCallback<BackendlessUser>()
+                {
+                    @Override
+                    public void handleResponse( BackendlessUser backendlessUser )
+                    {
+                        dialog.setMessage("Updating......");
+                        dialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void handleFault( BackendlessFault backendlessFault )
+                    {
+
+                    }
+                } );
+            }
+            monitor2 = 0;
+
+
         }
 
     }
