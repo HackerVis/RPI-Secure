@@ -13,32 +13,44 @@ import android.widget.ImageButton;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
+import com.backendless.async.callback.AsyncCallback;
+import com.backendless.exceptions.BackendlessFault;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ProgressDialog dialog;
     WebView videoView;
     ImageButton btnPlay;
-    BackendlessUser currentUser = Backendless.UserService.CurrentUser();
-    String ip = currentUser.getProperty("ip").toString();
-    ImageButton jab;
+    ImageButton ipchange;
     EditText etIp;
     int monitor = 0;
     Context context;
     String ipanew;
+    String oldIp;
+    BackendlessUser currentUser;
     private final String TAG = this.getClass().getSimpleName();
 
     String videoURL = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        etIp = findViewById(R.id.newip);
         context = getApplicationContext();
+        setContentView(R.layout.activity_main);
+        currentUser = Backendless.UserService.CurrentUser();
+        String ip = currentUser.getProperty("ip").toString();
         Intent intent = getIntent();
         ImageButton btnPlay = findViewById(R.id.btn_play);
         videoURL = "http://" + ip + "/";
-        setContentView(R.layout.activity_main);
+        etIp = findViewById(R.id.newip);
+        Log.i(TAG, ip);
+
+        if(ip != null) {
+            etIp.setText(ip);
+        }
+        else{
+            etIp.setText("");
+        }
         videoView = (WebView) findViewById(R.id.videoView);
-        jab = (ImageButton) findViewById(R.id.btn_ips);
+        ipchange = (ImageButton) findViewById(R.id.btn_ips);
         dialog = new ProgressDialog(MainActivity.this);
         dialog.setMessage("Please wait....");
         dialog.setCanceledOnTouchOutside(true);
@@ -46,8 +58,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         WebView videoView = (WebView) findViewById(R.id.videoView);
         videoView.loadUrl(videoURL);
         dialog.dismiss();
-        jab = findViewById(R.id.btn_ips);
-        jab.setOnClickListener(new View.OnClickListener() {
+        ipchange = findViewById(R.id.btn_ips);
+        ipchange.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IpButtonClicked();
@@ -64,8 +76,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         else if (monitor == 1) {
             BackendlessUser user = currentUser;
             etIp.setVisibility(View.GONE);
+            oldIp = etIp.getText().toString();
             ipanew = etIp.getText().toString();
             user.setProperty("ip", ipanew);
+            videoURL = "http://" + ipanew + "/";
+            dialog = new ProgressDialog(MainActivity.this);
+            dialog.setMessage("Configuring....");
+            dialog.setCanceledOnTouchOutside(true);
+            dialog.show();
+            WebView videoView = (WebView) findViewById(R.id.videoView);
+            videoView.loadUrl(videoURL);
+            if(ipanew.equals(oldIp)){
+                dialog.setMessage("Stopping...");
+                dialog.dismiss();
+            }
+            else{
+                Backendless.UserService.update( user, new AsyncCallback<BackendlessUser>()
+                {
+                    @Override
+                    public void handleResponse( BackendlessUser backendlessUser )
+                    {
+                        dialog.setMessage("Updating......");
+                        dialog.dismiss();
+
+                    }
+
+                    @Override
+                    public void handleFault( BackendlessFault backendlessFault )
+                    {
+
+                    }
+                } );
+            }
+            if(ipanew != null) {
+                etIp.setText(ipanew);
+            }
+            else{
+                etIp.setText("");
+            }
             monitor = 0;
         }
 

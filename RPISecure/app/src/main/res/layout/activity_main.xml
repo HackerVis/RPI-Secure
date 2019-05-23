@@ -72,7 +72,7 @@
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="New Ip"
+        android:text="@string/iptext"
         app:layout_constraintBottom_toTopOf="@+id/btn_ips"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
