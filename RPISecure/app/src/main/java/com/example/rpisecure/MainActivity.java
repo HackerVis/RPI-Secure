@@ -16,6 +16,7 @@ import com.backendless.BackendlessUser;
 import com.backendless.async.callback.AsyncCallback;
 import com.backendless.exceptions.BackendlessFault;
 
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     ProgressDialog dialog;
     WebView videoView;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     EditText note;
     int monitor = 0;
     int monitor2 = 0;
+    int monitor4 = 0;
     Context context;
     String ipanew;
     String oldIp;
@@ -32,18 +34,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String notes = "";
     BackendlessUser currentUser;
     String noteOld;
+    ImageButton set;
+    int monitor3 = 0;
+
+
     private final String TAG = this.getClass().getSimpleName();
 
     String videoURL = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         context = getApplicationContext();
         setContentView(R.layout.activity_main);
         currentUser = Backendless.UserService.CurrentUser();
         String ip = currentUser.getProperty("ip").toString();
         Intent intent = getIntent();
         ImageButton note = findViewById(R.id.btn_notes);
+        ImageButton set = findViewById(R.id.btn_set);
+        btnPlay = findViewById(R.id.btn_recordings);
+        ipanew = ip;
 
 
 
@@ -78,6 +88,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 NotesButtonClicked();
+            }
+        });
+        set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SetButtonClicked();
+            }
+        });
+        btnPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecordButtonClicked();
             }
         });
     }
@@ -176,6 +198,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+    private void SetButtonClicked() {
+        //Display Stuff
+        if(monitor3 == 0){
+            btnNotes.setVisibility(View.VISIBLE);
+            videoView.setVisibility(View.VISIBLE);
+            ipchange.setVisibility(View.VISIBLE);
+            etIp.setVisibility(View.VISIBLE);
+            btnPlay.setVisibility(View.VISIBLE);
+            etIp.setVisibility(View.GONE);
+            videoView.setVisibility(View.VISIBLE);
+            monitor3 = 1;
+        }
+        // Display setting options
+        else if(monitor3 == 1){
+            btnNotes.setVisibility(View.GONE);
+            videoView.setVisibility(View.GONE);
+            ipchange.setVisibility(View.GONE);
+            etIp.setVisibility(View.GONE);
+            ipchange.setVisibility(View.GONE);
+            btnPlay.setVisibility(View.GONE);
+            btnNotes.setVisibility(View.GONE);
+            videoView.setVisibility(View.GONE);
+            monitor3 = 0;
+        }
+    }
+    private void RecordButtonClicked() {
+        String ip = currentUser.getProperty("ip").toString();
+        if (monitor4 == 0){
+            videoURL = "https://github.com/HackerVis/RPISecure/tree/master/RPISafeSecure/Pictures";
+            videoView.loadUrl(videoURL);
+            monitor4 = 1;
+        }
+        else if (monitor4 == 1){
+            videoURL = "http://" + etIp.getText().toString() + "/";
+            videoView.loadUrl(videoURL);
+            monitor4 = 0;
+        }
+
+    }
+
 
     @Override
     public void onClick(View v) {

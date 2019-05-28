@@ -20,5 +20,5 @@
     <string name="empty_field_signup_error">Empty Field</string>
     <string name="title_activity_login">Login</string>
     <string name="ip">1.1.1.1:1111</string>
-    <string name="iptext">s</string>
+    <string name="iptext">s </string>
 </resources>
