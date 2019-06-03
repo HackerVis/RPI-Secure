@@ -3,7 +3,12 @@ package com.example.rpisecure;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +16,7 @@ import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 
 import com.backendless.Backendless;
 import com.backendless.BackendlessUser;
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     int monitor3 = 0;
     String store1 = "";
     String store2 = "";
+    Spinner spType;
 
 
     private final String TAG = this.getClass().getSimpleName();
@@ -53,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         context = getApplicationContext();
         setContentView(R.layout.activity_main);
@@ -69,11 +75,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         newUse = findViewById(R.id.edit_user);
         newPass = findViewById(R.id.edit_password);
         on=false;
-        String email = currentUser.getEmail().toString();
+        String email = currentUser.getEmail();
         newUse.setText(email);
         store2 = newUse.getText().toString();
         newPass.setText("");
         btnLogout = findViewById(R.id.logout);
+        spType = findViewById(R.id.spinner_theme);
+        spType.setVisibility(View.GONE);
 
         videoURL = "http://" + ip + "/";
         etIp = findViewById(R.id.newip);
@@ -244,6 +252,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnPlay.setVisibility(View.VISIBLE);
             etIp.setVisibility(View.GONE);
             videoView.setVisibility(View.VISIBLE);
+            spType.setVisibility(View.GONE);
+
             //settings
             btnUser.setVisibility(View.GONE);
             if(on){
@@ -266,6 +276,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             btnNotes.setVisibility(View.GONE);
             videoView.setVisibility(View.GONE);
             btnLogout.setVisibility(View.VISIBLE);
+            spType.setVisibility(View.VISIBLE);
             //settings
             btnUser.setVisibility(View.VISIBLE);
             if(on){
@@ -298,6 +309,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         newPass.setVisibility(View.VISIBLE);
         newUse.setVisibility(View.VISIBLE);
         btnSubmit.setVisibility(View.VISIBLE);
+        spType.setVisibility(View.GONE);
         on = true;
     }
     private void SubmitButtonClicked() {
@@ -320,12 +332,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 ipchange.setVisibility(View.GONE);
                 btnPlay.setVisibility(View.GONE);
                 btnNotes.setVisibility(View.GONE);
+                videoView.setVisibility(View.GONE);
+                btnLogout.setVisibility(View.VISIBLE);
+                spType.setVisibility(View.VISIBLE);
                 //settings
                 btnUser.setVisibility(View.VISIBLE);
-                newPass.setVisibility(View.GONE);
-                newUse.setVisibility(View.GONE);
-                btnSubmit.setVisibility(View.GONE);
                 on = false;
+
             }
             else{
                 user.setEmail(store1);
@@ -342,11 +355,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ipchange.setVisibility(View.GONE);
                         btnPlay.setVisibility(View.GONE);
                         btnNotes.setVisibility(View.GONE);
+                        videoView.setVisibility(View.GONE);
+                        btnLogout.setVisibility(View.VISIBLE);
+                        spType.setVisibility(View.VISIBLE);
                         //settings
                         btnUser.setVisibility(View.VISIBLE);
-                        newPass.setVisibility(View.GONE);
-                        newUse.setVisibility(View.GONE);
-                        btnSubmit.setVisibility(View.GONE);
                         on = false;
 
                     }
@@ -367,11 +380,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ipchange.setVisibility(View.GONE);
             btnPlay.setVisibility(View.GONE);
             btnNotes.setVisibility(View.GONE);
+            videoView.setVisibility(View.GONE);
+            btnLogout.setVisibility(View.VISIBLE);
+            spType.setVisibility(View.VISIBLE);
             //settings
             btnUser.setVisibility(View.VISIBLE);
-            newPass.setVisibility(View.GONE);
-            newUse.setVisibility(View.GONE);
-            btnSubmit.setVisibility(View.GONE);
             on = false;
         }
     }
@@ -393,6 +406,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     }
+
 
 
     @Override
